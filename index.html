@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beau Bush</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #EEEBE4;
+      --ink:   #0A0A09;
+      --mid:   #2A2926;
+      --dim:   #7C7970;
+      --faint: #C4BFB6;
+      --rule:  #1A1916;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      opacity: 0;
+      animation: fade .35s ease .05s both;
+    }
+
+    @keyframes fade { to { opacity: 1; } }
+
+    a { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
+    a:hover { text-decoration: none; }
+
+    /* ═══ TICKER ═══════════════════════════════ */
+    .ticker {
+      border-bottom: 1.5px solid var(--ink);
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 7px 0;
+      position: relative;
+    }
+
+    .ticker-track {
+      display: inline-block;
+      animation: tickscroll 45s linear infinite;
+      padding-left: 100%;
+    }
+
+    .ticker-track span { padding: 0 32px; position: relative; }
+    .ticker-track span::before {
+      content: '◆';
+      margin-right: 28px;
+      font-size: 8px;
+      vertical-align: middle;
+      opacity: 0.5;
+    }
+
+    @keyframes tickscroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    /* ═══ MAIN GRID ════════════════════════════ */
+    .page {
+      display: grid;
+      grid-template-columns: 1fr;
+      padding: 28px 32px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    /* ═══ TOP METADATA ═════════════════════════ */
+    .topmeta {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 24px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+      border-bottom: 1.5px solid var(--ink);
+    }
+
+    .topmeta .label {
+      font-weight: 400;
+      color: var(--dim);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+    }
+
+    .topmeta .val { color: var(--ink); }
+
+    /* ═══ HERO — OVERSIZED NAME ════════════════ */
+    .hero {
+      padding: 8px 0 4px;
+      position: relative;
+    }
+
+    .hero-name {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-size: clamp(96px, 22vw, 280px);
+      line-height: 0.82;
+      letter-spacing: -0.055em;
+      color: var(--ink);
+      position: relative;
+      display: block;
+    }
+
+    .hero-name .first {
+      display: block;
+      margin-left: -0.04em;
+    }
+
+    .hero-name .last {
+      display: block;
+      text-align: right;
+      font-style: italic;
+      font-weight: 400;
+      margin-top: -0.08em;
+      margin-right: -0.04em;
+    }
+
+    /* slash mark that sits between the two words */
+    .hero-slash {
+      position: absolute;
+      right: 0;
+      top: 0;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-align: right;
+      max-width: 220px;
+      line-height: 1.3;
+    }
+    .hero-slash .small {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--dim);
+      margin-bottom: 4px;
+      letter-spacing: 0.24em;
+    }
+
+    /* ═══ HERO POST-BAR ════════════════════════ */
+    .hero-bar {
+      margin-top: 24px;
+      padding-top: 14px;
+      border-top: 1.5px solid var(--ink);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .hero-lead {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      max-width: 22ch;
+    }
+
+    .hero-lead em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--mid);
+    }
+
+    .hero-stack {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: right;
+      line-height: 1.7;
+    }
+
+    .hero-stack .dim { color: var(--dim); font-weight: 400; }
+    .hero-stack .arr { color: var(--ink); }
+
+    /* ═══ SECTION SYSTEM ═══════════════════════ */
+    /* no visible section dividers — content flows */
+    /* instead, use big marginal labels and bleed layouts */
+
+    section {
+      padding: 72px 0 16px;
+      position: relative;
+    }
+
+    .sec-num {
+      position: absolute;
+      top: 72px;
+      right: 0;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    /* ═══ ABOUT ════════════════════════════════ */
+    #about {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 32px;
+      padding-top: 88px;
+    }
+
+    .bigmark {
+      font-size: 96px;
+      font-weight: 700;
+      line-height: 0.8;
+      letter-spacing: -0.04em;
+      font-style: italic;
+      color: var(--ink);
+      margin-top: -12px;
+    }
+
+    .about-body {
+      font-size: 19px;
+      line-height: 1.45;
+      font-weight: 400;
+      letter-spacing: -0.005em;
+      max-width: 34ch;
+    }
+
+    .about-body p { margin-bottom: 16px; }
+    .about-body p:last-child { margin-bottom: 0; }
+
+    .about-body strong {
+      font-weight: 700;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0 4px;
+    }
+
+    /* ═══ WORK ═════════════════════════════════ */
+    #work { padding-top: 88px; }
+
+    .work-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      padding-bottom: 12px;
+      margin-bottom: 0;
+      border-bottom: 1.5px solid var(--ink);
+    }
+
+    .work-head h2 {
+      font-size: clamp(52px, 10vw, 120px);
+      font-weight: 700;
+      line-height: 0.85;
+      letter-spacing: -0.05em;
+    }
+
+    .work-head .count {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding-bottom: 8px;
+    }
+
+    .work-item {
+      display: grid;
+      grid-template-columns: 80px 1fr 180px;
+      gap: 24px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--ink);
+      align-items: baseline;
+    }
+
+    .work-idx {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--dim);
+    }
+
+    .work-main .role {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .work-main .co {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--mid);
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .work-main .desc {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--mid);
+      font-weight: 400;
+      max-width: 50ch;
+    }
+
+    .work-period {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: right;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .work-period .dim { color: var(--dim); font-weight: 400; display: block; font-size: 9px; margin-bottom: 2px; letter-spacing: 0.2em; }
+
+    /* tools line */
+    .tools {
+      margin-top: 32px;
+      display: flex;
+      gap: 0;
+      align-items: baseline;
+      flex-wrap: wrap;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .tools-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-right: 20px;
+      flex-shrink: 0;
+    }
+
+    .tools-list {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+    }
+
+    .tools-list span {
+      position: relative;
+    }
+
+    .tools-list span:not(:last-child)::after {
+      content: '/';
+      margin: 0 8px;
+      color: var(--dim);
+      font-weight: 400;
+    }
+
+    /* ═══ DENVER SKYLINE BAND ════════════════ */
+    .skyline {
+      margin: 120px -32px 0;
+      position: relative;
+      aspect-ratio: 16/7;
+      background: var(--paper);
+      overflow: hidden;
+    }
+
+    .skyline-photo-wrap {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    .skyline-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+      /* poster treatment: grayscale, crushed contrast, slight darken */
+      filter: grayscale(100%) contrast(1.5) brightness(1.05);
+      /* multiply the photo onto the cream paper so whites become paper-toned */
+      mix-blend-mode: multiply;
+    }
+
+    /* halftone dot overlay — the thing that sells the poster look */
+    .skyline-halftone {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      /* two-tone radial gradient dots repeating */
+      background-image: radial-gradient(circle at center, #0A0A09 38%, transparent 42%);
+      background-size: 3.5px 3.5px;
+      mix-blend-mode: multiply;
+      opacity: 0.4;
+    }
+
+    /* fractal noise grain overlay */
+    .skyline-grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.35;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' seed='5'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    .skyline-caption {
+      position: absolute;
+      bottom: 14px;
+      left: 32px;
+      right: 32px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--paper);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      mix-blend-mode: difference;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .skyline-label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 22px 32px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+      z-index: 2;
+      background: linear-gradient(to bottom, var(--paper) 0%, rgba(238,235,228,0.85) 60%, rgba(238,235,228,0) 100%);
+    }
+
+    .skyline-label .big {
+      font-size: clamp(32px, 6vw, 64px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+      text-transform: none;
+    }
+
+    .skyline-label .big em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .skyline-label .right {
+      text-align: right;
+      line-height: 1.6;
+      font-size: 9px;
+    }
+    .skyline-label .right .dim { color: var(--dim); font-weight: 400; display: block; }
+
+    /* ═══ OUTDOORS ═════════════════════════════ */
+    #outdoors { padding-top: 88px; }
+
+    .outdoors-wrap {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .outdoors-title {
+      font-size: clamp(52px, 9vw, 96px);
+      font-weight: 700;
+      line-height: 0.85;
+      letter-spacing: -0.045em;
+      font-style: italic;
+    }
+
+    .outdoors-title .serif { font-style: italic; font-weight: 400; }
+
+    .outdoors-intro {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--mid);
+      max-width: 48ch;
+      margin-top: 16px;
+    }
+
+    .outdoors-list {
+      list-style: none;
+      border-top: 1.5px solid var(--ink);
+    }
+
+    .outdoors-list li {
+      display: grid;
+      grid-template-columns: 30px 1fr auto;
+      gap: 20px;
+      align-items: baseline;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .outdoors-list li .num {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--dim);
+      letter-spacing: 0.14em;
+    }
+
+    .outdoors-list li .name {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+
+    .outdoors-list li .detail {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--mid);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ═══ THINKING ═════════════════════════════ */
+    #thinking { padding-top: 96px; }
+
+    .think-head {
+      padding-bottom: 18px;
+      border-bottom: 1.5px solid var(--ink);
+      margin-bottom: 0;
+    }
+
+    .think-head .eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 12px;
+    }
+
+    .think-head h2 {
+      font-size: clamp(32px, 6vw, 64px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+      max-width: 22ch;
+    }
+
+    .think-head h2 b { font-weight: 700; font-style: normal; }
+
+    .think-item {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 24px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--ink);
+      align-items: baseline;
+    }
+
+    .think-item .n {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--dim);
+    }
+
+    .think-item .t {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      max-width: 42ch;
+    }
+
+    .think-item .t b {
+      font-weight: 700;
+    }
+
+    /* ═══ CONTACT ══════════════════════════════ */
+    #contact {
+      padding: 120px 0 80px;
+    }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: end;
+      padding-bottom: 20px;
+      border-bottom: 1.5px solid var(--ink);
+    }
+
+    .contact-lead {
+      font-size: clamp(44px, 8vw, 88px);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      max-width: 14ch;
+    }
+
+    .contact-lead em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .contact-side {
+      text-align: right;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      line-height: 1.7;
+    }
+
+    .contact-side .dim { color: var(--dim); font-weight: 400; }
+
+    .contact-email {
+      display: inline-block;
+      font-size: clamp(28px, 5.5vw, 56px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-top: 40px;
+      text-decoration: none;
+      border-bottom: 3px solid var(--ink);
+      padding-bottom: 4px;
+      transition: transform .2s;
+    }
+
+    .contact-email:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .contact-links {
+      margin-top: 32px;
+      display: flex;
+      gap: 32px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .contact-links a {
+      text-decoration: none;
+      border-bottom: 1.5px solid var(--ink);
+      padding-bottom: 2px;
+    }
+
+    .contact-links a::after { content: ' ↗'; font-size: 10px; }
+    .contact-links a:hover { border-color: transparent; }
+
+    /* ═══ FOOTER ═══════════════════════════════ */
+    footer {
+      margin-top: 0;
+      padding-top: 16px;
+      border-top: 1.5px solid var(--ink);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    footer .mid-col { text-align: center; }
+    footer .end-col { text-align: right; }
+    footer .ink { color: var(--ink); }
+
+    /* ═══ RESPONSIVE ═══════════════════════════ */
+    @media (max-width: 720px) {
+      .page { padding: 20px 20px; }
+
+      .topmeta {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 20px;
+      }
+
+      .hero-slash { display: none; }
+
+      .hero-bar {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .hero-stack { text-align: left; }
+
+      #about {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding-top: 64px;
+      }
+
+      .bigmark { font-size: 64px; }
+      .about-body { font-size: 16px; }
+
+      .work-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+      .work-idx, .work-period { text-align: left; }
+      .work-period { margin-top: 8px; }
+
+      .outdoors-wrap {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .outdoors-list li {
+        grid-template-columns: 24px 1fr;
+      }
+      .outdoors-list li .detail {
+        grid-column: 2;
+        margin-top: 2px;
+      }
+
+      .contact-wrap {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .contact-side { text-align: left; }
+
+      .skyline { margin: 72px -20px 0; }
+      .skyline-caption { left: 20px; right: 20px; }
+      .skyline-label { padding: 16px 20px 32px; }
+
+      footer {
+        grid-template-columns: 1fr;
+        gap: 4px;
+        text-align: left !important;
+      }
+      footer .mid-col, footer .end-col { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ TICKER ═══ -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>Broomfield, CO</span><span>39°32′N 106°08′W</span><span>Elev. 9,600 ft</span><span>Currently reading cold outbound as a dying art</span><span>Available for interesting conversations</span><span>Spring corn season</span><span>Last updated April 2026</span><span>Broomfield, CO</span><span>39°32′N 106°08′W</span><span>Elev. 9,600 ft</span>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- ═══ TOPMETA ═══ -->
+    <div class="topmeta">
+      <div><span class="label">Index</span><span class="val">01 / Beau Bush</span></div>
+      <div><span class="label">Vol.</span><span class="val">MMXXVI</span></div>
+      <div><span class="label">Based</span><span class="val">Mountain West</span></div>
+      <div style="text-align:right"><span class="label">Status</span><span class="val">Open to work</span></div>
+    </div>
+
+    <!-- ═══ HERO ═══ -->
+    <div class="hero">
+      <h1 class="hero-name">
+        <span class="first">Beau</span>
+        <span class="last">Bush.</span>
+      </h1>
+
+      <div class="hero-slash">
+        <span class="small">A personal site</span>
+        No. 001 &nbsp;/&nbsp; ⟶
+      </div>
+
+      <div class="hero-bar">
+        <p class="hero-lead">
+          Finds clients. <em>Finds summits.</em> Writes the occasional honest pipeline review.
+        </p>
+        <div class="hero-stack">
+          <span class="dim">Doing</span> <span class="arr">SDR / GTM / RevOps</span><br>
+          <span class="dim">Thinking</span> <span class="arr">Org design, go-to-market</span><br>
+          <span class="dim">Outside</span> <span class="arr">Above treeline</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ABOUT ═══ -->
+    <section id="about">
+      <span class="bigmark">§</span>
+      <div class="about-body">
+        <p>I find clients and find summits. Sales development based in the Mountain West, focused on the early, messy part of revenue — figuring out who you're selling to, why they should care, and building <strong>systems that don't collapse</strong> when you scale them.</p>
+        <p>Interested in GTM org design, how RevOps teams are structured, and why most pipeline reviews are fiction. Outside of work I'm usually somewhere above treeline.</p>
+      </div>
+      <div class="sec-num">§ Pt. 01 — About</div>
+    </section>
+
+    <!-- ═══ WORK ═══ -->
+    <section id="work">
+      <div class="work-head">
+        <h2>Work,<br>so far.</h2>
+        <span class="count">Three entries</span>
+      </div>
+
+      <div class="work-item">
+        <span class="work-idx">→ 001</span>
+        <div class="work-main">
+          <p class="role">Sales Development Rep</p>
+          <p class="co">Company Name</p>
+          <p class="desc">What you did, who you sold to, one thing you were proud of. Keep it short and honest.</p>
+        </div>
+        <div class="work-period">
+          <span class="dim">Tenure</span>
+          2023 —<br>present
+        </div>
+      </div>
+
+      <div class="work-item">
+        <span class="work-idx">→ 002</span>
+        <div class="work-main">
+          <p class="role">Previous Role</p>
+          <p class="co">Company Name</p>
+          <p class="desc">What you did here. What you learned. No bullet points needed.</p>
+        </div>
+        <div class="work-period">
+          <span class="dim">Tenure</span>
+          2022 —<br>2023
+        </div>
+      </div>
+
+      <div class="work-item">
+        <span class="work-idx">→ 003</span>
+        <div class="work-main">
+          <p class="role">B.S. Business Admin</p>
+          <p class="co">University of Nevada, Reno — Honors</p>
+          <p class="desc">Marketing and management, data analytics minor. 3.9 GPA.</p>
+        </div>
+        <div class="work-period">
+          <span class="dim">Year</span>
+          2022
+        </div>
+      </div>
+
+      <div class="tools">
+        <span class="tools-lbl">Tools of the trade</span>
+        <div class="tools-list">
+          <span>Salesforce</span><span>Outreach</span><span>Clay</span><span>Apollo</span><span>ZoomInfo</span><span>Gong</span><span>LinkedIn SN</span><span>HubSpot</span><span>SQL</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ OUTDOORS ═══ -->
+    <section id="outdoors">
+      <div class="outdoors-wrap">
+        <div>
+          <h2 class="outdoors-title">Above<br>treeline<span class="serif">,</span></h2>
+          <p class="outdoors-intro">When I'm not prospecting I'm in the mountains. Backcountry skiing is the main obsession — spring corn, early starts, long days. Some climbing mixed in. A lot of time spent looking at maps.</p>
+        </div>
+        <ul class="outdoors-list">
+          <li>
+            <span class="num">→ 01</span>
+            <span class="name">Backcountry skiing</span>
+            <span class="detail">5,000+ vert / day</span>
+          </li>
+          <li>
+            <span class="num">→ 02</span>
+            <span class="name">Alpine climbing</span>
+            <span class="detail">14,433 ft PR</span>
+          </li>
+          <li>
+            <span class="num">→ 03</span>
+            <span class="name">Trail running</span>
+            <span class="detail">Rocky Mountains</span>
+          </li>
+          <li>
+            <span class="num">→ 04</span>
+            <span class="name">Mountain biking</span>
+            <span class="detail">CO · UT</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══ THINKING ═══ -->
+    <section id="thinking">
+      <div class="think-head">
+        <p class="eyebrow">Currently, actively, obsessively —</p>
+        <h2>Four things I'm <b>thinking about</b> when I should probably be asleep.</h2>
+      </div>
+
+      <div class="think-item">
+        <span class="n">Nº 01</span>
+        <p class="t">How <b>GTM orgs get built from scratch</b> — the sequencing decisions that compound or collapse later.</p>
+      </div>
+      <div class="think-item">
+        <span class="n">Nº 02</span>
+        <p class="t">The gap between <b>CRM data and sales reality.</b> Most pipeline reviews are fiction.</p>
+      </div>
+      <div class="think-item">
+        <span class="n">Nº 03</span>
+        <p class="t">Spring corn conditions in the <b>Elk Mountains</b> — specifically the aspects that hold longest.</p>
+      </div>
+      <div class="think-item">
+        <span class="n">Nº 04</span>
+        <p class="t">Whether cold outreach is a <b>dying art</b>, or an art most people never learned.</p>
+      </div>
+    </section>
+
+    <!-- ═══ CONTACT ═══ -->
+    <section id="contact">
+      <div class="contact-wrap">
+        <h2 class="contact-lead">Let's <em>talk</em> — about roles, GTM, or route beta.</h2>
+        <div class="contact-side">
+          <span class="dim">Reply time</span><br>
+          Usually 24 hr<br><br>
+          <span class="dim">Time zone</span><br>
+          MST / UTC−7
+        </div>
+      </div>
+
+      <a href="mailto:hello@beaubush.com" class="contact-email">hello@beaubush.com&nbsp;↗</a>
+
+      <div class="contact-links">
+        <a href="#">LinkedIn</a>
+        <a href="#">Twitter / X</a>
+        <a href="#">Résumé (PDF)</a>
+      </div>
+    </section>
+
+    <!-- ═══ DENVER SKYLINE ═══ -->
+    <div class="skyline">
+      <div class="skyline-label">
+        <span class="big">Denver, <em>CO</em></span>
+        <span class="right">
+          <span class="dim">Home base</span>
+          39.74°N · 104.99°W<br>
+          Elev. 5,280 ft
+        </span>
+      </div>
+
+      <div class="skyline-photo-wrap">
+        <img class="skyline-photo" src="denver-skyline.png" alt="Denver skyline with Front Range behind">
+        <div class="skyline-halftone"></div>
+        <div class="skyline-grain"></div>
+      </div>
+
+      <div class="skyline-caption">
+        <span>Plate 01 / Denver skyline, looking west</span>
+        <span>Halftone / Offset / 2026</span>
+      </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+      <span class="ink">© MMXXVI Beau Bush</span>
+      <span class="mid-col">Set in Helvetica Neue</span>
+      <span class="end-col">beaubush.com / 001</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>
